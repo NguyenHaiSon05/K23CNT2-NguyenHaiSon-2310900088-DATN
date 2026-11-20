@@ -3,6 +3,7 @@ package vn.edu.nguyentrai.rooms.repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +27,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                           @Param("startTime") LocalTime startTime,
                           @Param("endTime") LocalTime endTime,
                           @Param("statuses") Collection<BookingStatus> statuses);
+    List<Booking> findByUserUsernameOrderByBookingDateDescStartTimeDesc(String username);
 }

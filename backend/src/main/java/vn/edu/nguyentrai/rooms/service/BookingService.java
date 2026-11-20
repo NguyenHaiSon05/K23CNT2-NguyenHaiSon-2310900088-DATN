@@ -76,4 +76,9 @@ public class BookingService {
         booking.setStatus("STUDENT".equals(role) ? BookingStatus.PENDING : BookingStatus.APPROVED);
         return bookingRepository.save(booking);
     }
+
+    @Transactional(readOnly = true)
+    public List<Booking> findMine(String username) {
+        return bookingRepository.findByUserUsernameOrderByBookingDateDescStartTimeDesc(username);
+    }
 }
