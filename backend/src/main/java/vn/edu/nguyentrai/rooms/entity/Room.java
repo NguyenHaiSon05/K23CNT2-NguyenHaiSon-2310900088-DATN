@@ -32,4 +32,8 @@ public class Room {
 
     @Column(nullable = false, length = 20)
     private String status = "ACTIVE";
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "room_type_id")
+    private RoomType roomType;
 }
