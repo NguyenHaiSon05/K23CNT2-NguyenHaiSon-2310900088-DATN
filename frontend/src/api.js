@@ -24,6 +24,14 @@ export async function apiFetch(path, options = {}) {
     window.location.href = "/login";
     throw new Error("Phiên đăng nhập hết hạn");
   }
-  if (!res.ok) throw new Error("Lỗi " + res.status);
-  return res.json();
+  if (res.status === 204) return null;
+
+  let data = null;
+  try {
+    data = await res.json();
+  } catch {
+    // phản hồi không có nội dung JSON
+  }
+  if (!res.ok) throw new Error(data?.message || "Lỗi " + res.status);
+  return data;
 }
