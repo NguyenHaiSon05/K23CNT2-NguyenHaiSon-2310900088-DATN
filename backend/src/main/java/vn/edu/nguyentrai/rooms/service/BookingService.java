@@ -81,4 +81,20 @@ public class BookingService {
     public List<Booking> findMine(String username) {
         return bookingRepository.findByUserUsernameOrderByBookingDateDescStartTimeDesc(username);
     }
+
+    @Transactional(readOnly = true)
+    public List<Booking> findByStatus(BookingStatus status) {
+        return bookingRepository.findByStatusOrderByBookingDateAscStartTimeAsc(status);
+    }
+
+    @Transactional
+    public Booking decide(Long id, boolean approve) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy lượt đặt"));
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chỉ xử lý được lượt đang chờ duyệt");
+        }
+        booking.setStatus(approve ? BookingStatus.APPROVED : BookingStatus.REJECTED);
+        return bookingRepository.save(booking);
+    }
 }

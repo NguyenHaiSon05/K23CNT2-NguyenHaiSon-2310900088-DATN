@@ -4,16 +4,12 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import vn.edu.nguyentrai.rooms.dto.BookingRequest;
 import vn.edu.nguyentrai.rooms.dto.BookingResponse;
+import vn.edu.nguyentrai.rooms.entity.BookingStatus;
 import vn.edu.nguyentrai.rooms.service.BookingService;
 
 @RestController
@@ -36,5 +32,21 @@ public class BookingController {
     public List<BookingResponse> myBookings(Authentication auth) {
         return bookingService.findMine(auth.getName()).stream()
                 .map(BookingResponse::from).toList();
+    }
+
+    @GetMapping("/pending")
+    public List<BookingResponse> pending() {
+        return bookingService.findByStatus(BookingStatus.PENDING).stream()
+                .map(BookingResponse::from).toList();
+    }
+
+    @PutMapping("/{id}/approve")
+    public BookingResponse approve(@PathVariable Long id) {
+        return BookingResponse.from(bookingService.decide(id, true));
+    }
+
+    @PutMapping("/{id}/reject")
+    public BookingResponse reject(@PathVariable Long id) {
+        return BookingResponse.from(bookingService.decide(id, false));
     }
 }

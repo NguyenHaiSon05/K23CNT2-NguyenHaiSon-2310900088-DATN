@@ -28,4 +28,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                           @Param("endTime") LocalTime endTime,
                           @Param("statuses") Collection<BookingStatus> statuses);
     List<Booking> findByUserUsernameOrderByBookingDateDescStartTimeDesc(String username);
+    List<Booking> findByStatusOrderByBookingDateAscStartTimeAsc(BookingStatus status);
 }
