@@ -29,4 +29,16 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                           @Param("statuses") Collection<BookingStatus> statuses);
     List<Booking> findByUserUsernameOrderByBookingDateDescStartTimeDesc(String username);
     List<Booking> findByStatusOrderByBookingDateAscStartTimeAsc(BookingStatus status);
+
+    @Query("""
+        select b from Booking b
+        where b.room.id = :roomId
+          and b.bookingDate between :from and :to
+          and b.status in :statuses
+        order by b.bookingDate, b.startTime
+        """)
+    List<Booking> findForCalendar(@Param("roomId") Long roomId,
+                                  @Param("from") LocalDate from,
+                                  @Param("to") LocalDate to,
+                                  @Param("statuses") Collection<BookingStatus> statuses);
 }

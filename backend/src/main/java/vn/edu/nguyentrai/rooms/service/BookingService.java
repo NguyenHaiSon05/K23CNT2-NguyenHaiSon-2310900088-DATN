@@ -118,4 +118,9 @@ public class BookingService {
         booking.setStatus(BookingStatus.CANCELLED);
         return bookingRepository.save(booking);
     }
+
+    @Transactional(readOnly = true)
+    public List<Booking> calendar(Long roomId, LocalDate from, LocalDate to) {
+        return bookingRepository.findForCalendar(roomId, from, to, HOLDING);
+    }
 }

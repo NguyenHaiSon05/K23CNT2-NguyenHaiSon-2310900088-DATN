@@ -1,7 +1,9 @@
 package vn.edu.nguyentrai.rooms.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +39,15 @@ public class BookingController {
     @GetMapping("/pending")
     public List<BookingResponse> pending() {
         return bookingService.findByStatus(BookingStatus.PENDING).stream()
+                .map(BookingResponse::from).toList();
+    }
+
+    @GetMapping("/calendar")
+    public List<BookingResponse> calendar(
+            @RequestParam Long roomId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {
+        return bookingService.calendar(roomId, from, to).stream()
                 .map(BookingResponse::from).toList();
     }
 
