@@ -97,6 +97,7 @@ export default function RoomListPage() {
       </p>
       <h1>RoomS - Danh sách phòng</h1>
       <p><Link to="/booking">→ Tìm phòng trống và đặt phòng</Link></p>
+      <p><Link to="/my-bookings">→ Lịch đặt phòng của tôi</Link></p>
       {canManage && <p><Link to="/approvals">→ Duyệt đặt phòng</Link></p>}
       {error && <p className="error">{error}</p>}
 

@@ -49,4 +49,9 @@ public class BookingController {
     public BookingResponse reject(@PathVariable Long id) {
         return BookingResponse.from(bookingService.decide(id, false));
     }
+
+    @PutMapping("/{id}/cancel")
+    public BookingResponse cancel(@PathVariable Long id, Authentication auth) {
+        return BookingResponse.from(bookingService.cancel(id, auth.getName()));
+    }
 }

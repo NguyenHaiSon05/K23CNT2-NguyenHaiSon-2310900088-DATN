@@ -97,4 +97,25 @@ public class BookingService {
         booking.setStatus(approve ? BookingStatus.APPROVED : BookingStatus.REJECTED);
         return bookingRepository.save(booking);
     }
+
+    @Transactional
+    public Booking cancel(Long id, String username) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy lượt đặt"));
+
+        User actor = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Không tìm thấy người dùng"));
+        String role = actor.getRole().getName();
+        boolean isManager = "ADMIN".equals(role) || "ROOM_MANAGER".equals(role);
+        boolean isOwner = booking.getUser().getId().equals(actor.getId());
+
+        if (!isOwner && !isManager) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Bạn không có quyền hủy lượt đặt này");
+        }
+        if (booking.getStatus() != BookingStatus.PENDING && booking.getStatus() != BookingStatus.APPROVED) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Lượt đặt này không thể hủy");
+        }
+        booking.setStatus(BookingStatus.CANCELLED);
+        return bookingRepository.save(booking);
+    }
 }

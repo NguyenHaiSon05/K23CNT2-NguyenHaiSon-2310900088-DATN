@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import RoomListPage from "./pages/RoomListPage";
 import BookingPage from "./pages/BookingPage";
 import ApprovalPage from "./pages/ApprovalPage";
+import MyBookingsPage from "./pages/MyBookingsPage";
 
 function PrivateRoute({ children }) {
   return getAuth() ? children : <Navigate to="/login" replace />;
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<PrivateRoute><RoomListPage /></PrivateRoute>} />
         <Route path="/booking" element={<PrivateRoute><BookingPage /></PrivateRoute>} />
         <Route path="/approvals" element={<PrivateRoute><ApprovalPage /></PrivateRoute>} />
+        <Route path="/my-bookings" element={<PrivateRoute><MyBookingsPage /></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   );
