@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { apiFetch, getAuth, logout } from "../api";
 
 const EMPTY_FORM = {
@@ -95,6 +96,7 @@ export default function RoomListPage() {
         <button onClick={handleLogout}>Đăng xuất</button>
       </p>
       <h1>RoomS - Danh sách phòng</h1>
+      <p><Link to="/booking">→ Tìm phòng trống và đặt phòng</Link></p>
       {error && <p className="error">{error}</p>}
 
       {canManage && !form && <p><button onClick={openCreate}>+ Thêm phòng</button></p>}

@@ -1,13 +1,17 @@
 package vn.edu.nguyentrai.rooms.controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
 import vn.edu.nguyentrai.rooms.dto.RoomRequest;
+import vn.edu.nguyentrai.rooms.entity.BookingStatus;
 import vn.edu.nguyentrai.rooms.entity.Room;
 import vn.edu.nguyentrai.rooms.entity.RoomType;
 import vn.edu.nguyentrai.rooms.repository.RoomRepository;
@@ -28,6 +32,18 @@ public class RoomController {
     @GetMapping
     public List<Room> getAll() {
         return roomRepository.findAll();
+    }
+
+    @GetMapping("/available")
+    public List<Room> available(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime end) {
+        if (!start.isBefore(end)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Giờ kết thúc phải sau giờ bắt đầu");
+        }
+        return roomRepository.findAvailable(date, start, end,
+                List.of(BookingStatus.PENDING, BookingStatus.APPROVED));
     }
 
     @GetMapping("/{id}")

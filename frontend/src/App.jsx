@@ -3,6 +3,7 @@ import "./App.css";
 import { getAuth } from "./api";
 import LoginPage from "./pages/LoginPage";
 import RoomListPage from "./pages/RoomListPage";
+import BookingPage from "./pages/BookingPage";
 
 function PrivateRoute({ children }) {
   return getAuth() ? children : <Navigate to="/login" replace />;
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<PrivateRoute><RoomListPage /></PrivateRoute>} />
+        <Route path="/booking" element={<PrivateRoute><BookingPage /></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   );
