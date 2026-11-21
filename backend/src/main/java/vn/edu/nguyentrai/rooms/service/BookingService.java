@@ -18,6 +18,7 @@ import vn.edu.nguyentrai.rooms.repository.BookingRepository;
 import vn.edu.nguyentrai.rooms.repository.RoomRepository;
 import vn.edu.nguyentrai.rooms.repository.UserRepository;
 
+
 @Service
 public class BookingService {
 
@@ -26,12 +27,14 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     public BookingService(BookingRepository bookingRepository, RoomRepository roomRepository,
-                          UserRepository userRepository) {
+                          UserRepository userRepository, EmailService emailService) {
         this.bookingRepository = bookingRepository;
         this.roomRepository = roomRepository;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -74,7 +77,11 @@ public class BookingService {
         booking.setEndTime(req.getEndTime());
         booking.setPurpose(req.getPurpose());
         booking.setStatus("STUDENT".equals(role) ? BookingStatus.PENDING : BookingStatus.APPROVED);
-        return bookingRepository.save(booking);
+        Booking saved = bookingRepository.save(booking);
+        emailService.sendBookingMail(saved, saved.getStatus() == BookingStatus.PENDING
+                ? "Yêu cầu đặt phòng đã được ghi nhận, đang chờ duyệt"
+                : "Đặt phòng thành công");
+        return saved;
     }
 
     @Transactional(readOnly = true)
@@ -95,7 +102,10 @@ public class BookingService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Chỉ xử lý được lượt đang chờ duyệt");
         }
         booking.setStatus(approve ? BookingStatus.APPROVED : BookingStatus.REJECTED);
-        return bookingRepository.save(booking);
+        Booking saved = bookingRepository.save(booking);
+        emailService.sendBookingMail(saved, approve ? "Yêu cầu đặt phòng đã được duyệt"
+                : "Yêu cầu đặt phòng bị từ chối");
+        return saved;
     }
 
     @Transactional
