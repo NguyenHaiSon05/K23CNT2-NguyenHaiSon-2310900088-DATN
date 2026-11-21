@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/rooms/**").hasAnyRole("ADMIN", "ROOM_MANAGER")
                         .requestMatchers("/api/bookings/pending", "/api/bookings/*/approve", "/api/bookings/*/reject")
                         .hasAnyRole("ADMIN", "ROOM_MANAGER")
+                        .requestMatchers("/api/stats/**").hasAnyRole("ADMIN", "ROOM_MANAGER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

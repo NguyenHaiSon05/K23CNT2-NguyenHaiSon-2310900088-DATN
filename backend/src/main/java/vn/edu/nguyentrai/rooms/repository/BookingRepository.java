@@ -41,4 +41,15 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                                   @Param("from") LocalDate from,
                                   @Param("to") LocalDate to,
                                   @Param("statuses") Collection<BookingStatus> statuses);
+
+    long countByStatus(BookingStatus status);
+
+    @Query("""
+        select b.room.roomCode, b.room.name, count(b)
+        from Booking b
+        where b.status in :statuses
+        group by b.room.id, b.room.roomCode, b.room.name
+        order by count(b) desc
+        """)
+    List<Object[]> topRooms(@Param("statuses") Collection<BookingStatus> statuses);
 }

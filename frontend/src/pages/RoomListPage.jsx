@@ -100,6 +100,7 @@ export default function RoomListPage() {
       <p><Link to="/my-bookings">→ Lịch đặt phòng của tôi</Link></p>
       <p><Link to="/calendar">→ Lịch tuần của phòng</Link></p>
       {canManage && <p><Link to="/approvals">→ Duyệt đặt phòng</Link></p>}
+      {canManage && <p><Link to="/stats">→ Thống kê</Link></p>}
       {error && <p className="error">{error}</p>}
 
       {canManage && !form && <p><button onClick={openCreate}>+ Thêm phòng</button></p>}
