@@ -26,7 +26,8 @@ public class DataSeeder {
     private void createIfMissing(UserRepository userRepo, RoleRepository roleRepo, PasswordEncoder encoder,
                                  String username, String fullName, String email, String roleName) {
         if (userRepo.findByUsername(username).isPresent()) return;
-        Role role = roleRepo.findByName(roleName).orElseThrow();
+        Role role = roleRepo.findByName(roleName)
+                .orElseGet(() -> roleRepo.save(new Role(null, roleName)));
         User u = new User();
         u.setUsername(username);
         u.setPassword(encoder.encode("123456"));

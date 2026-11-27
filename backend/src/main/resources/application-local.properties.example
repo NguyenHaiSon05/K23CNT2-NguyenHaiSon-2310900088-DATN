@@ -1,0 +1,9 @@
+spring.datasource.password=Zuboka@05
+app.jwt.secret=CHUOI_BI_MAT_DAI_IT_NHAT_32_KY_TU
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=EMAIL_GMAIL
+spring.mail.password=MAT_KHAU_UNG_DUNG
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+app.mail.from=EMAIL_GMAIL

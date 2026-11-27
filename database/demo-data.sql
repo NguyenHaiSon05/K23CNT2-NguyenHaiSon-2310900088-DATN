@@ -1,5 +1,11 @@
 USE rooms;
 
+INSERT IGNORE INTO room_types (name, description) VALUES
+('Phòng học lý thuyết', 'Phòng học thông thường'),
+('Phòng máy tính', 'Phòng có máy tính thực hành'),
+('Phòng thực hành', 'Phòng thực hành, thí nghiệm'),
+('Hội trường', 'Sức chứa lớn, tổ chức sự kiện');
+
 -- 1. Thêm phòng demo (bỏ qua nếu đã có mã phòng)
 INSERT IGNORE INTO rooms (room_code, name, capacity, location, status, room_type_id) VALUES
 ('C101', 'Phòng học C101', 50, 'Tòa C - Tầng 1', 'ACTIVE', (SELECT id FROM room_types WHERE name = 'Phòng học lý thuyết')),
@@ -11,7 +17,7 @@ INSERT IGNORE INTO rooms (room_code, name, capacity, location, status, room_type
 DELETE FROM bookings;
 
 -- 3. Lượt đặt demo (ngày 08-10/12/2026 là sau mốc nộp, nên hiển thị tốt trong lịch tuần)
-SET @sv = (SELECT id FROM users WHERE username = 'sinhvien');
+SET @sv = (SELECT id FROM users WHERE username = 'sinhvien');   
 SET @gv = (SELECT id FROM users WHERE username = 'giangvien');
 
 INSERT INTO bookings (room_id, user_id, booking_date, start_time, end_time, purpose, status, created_at) VALUES
